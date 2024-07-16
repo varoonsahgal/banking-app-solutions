@@ -11,13 +11,15 @@ public class BankingApplication {
         System.out.println(ConsoleColors.BOLD + ConsoleColors.BLUE + "Welcome to Your Bank!" + ConsoleColors.RESET);
         String choice;
         do {
-            choice = displayMenu();
+            displayMenu();
+            choice = getUserChoice();
+            handleUserChoice(choice);
         } while (!choice.equals("7"));
 
         scanner.close();
     }
 
-    private static String displayMenu() {
+    private static void displayMenu() {
         System.out.println(ConsoleColors.BOLD + ConsoleColors.YELLOW + "\nMenu" + ConsoleColors.RESET);
         System.out.println("1. Register");
         System.out.println("2. Select User");
@@ -27,9 +29,13 @@ public class BankingApplication {
         System.out.println("6. View Transaction History");
         System.out.println("7. Exit");
         System.out.print(ConsoleColors.BOLD + "Enter your choice: " + ConsoleColors.RESET);
+    }
 
-        String choice = scanner.nextLine();
+    private static String getUserChoice() {
+        return scanner.nextLine();
+    }
 
+    private static void handleUserChoice(String choice) {
         switch (choice) {
             case "1":
                 registerUser();
@@ -55,8 +61,6 @@ public class BankingApplication {
             default:
                 System.out.println(ConsoleColors.RED + "Invalid choice. Please try again." + ConsoleColors.RESET);
         }
-
-        return choice;
     }
 
     private static void registerUser() {
