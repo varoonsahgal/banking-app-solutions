@@ -67,7 +67,7 @@ public class BankingApplication {
         System.out.print(ConsoleColors.BOLD + "Enter username: " + ConsoleColors.RESET);
         String username = scanner.nextLine();
         if (!bank.isUsernameTaken(username)) {
-            bank.register(username);
+            bank.register(new Username(username));
             System.out.println(ConsoleColors.GREEN + "User registered successfully." + ConsoleColors.RESET);
         } else {
             System.out.println(ConsoleColors.RED + "Username already taken." + ConsoleColors.RESET);
@@ -89,12 +89,7 @@ public class BankingApplication {
         if (currentUser != null) {
             System.out.print(ConsoleColors.BOLD + "Enter amount to deposit: " + ConsoleColors.RESET);
             double depositAmount = Double.parseDouble(scanner.nextLine());
-            if (depositAmount > 0) {
-                currentUser.deposit(depositAmount);
-                System.out.println(ConsoleColors.GREEN + "Deposited: $" + depositAmount + ConsoleColors.RESET);
-            } else {
-                System.out.println(ConsoleColors.RED + "Invalid deposit amount." + ConsoleColors.RESET);
-            }
+            bank.deposit(currentUser, depositAmount);
         } else {
             System.out.println(ConsoleColors.RED + "No user selected." + ConsoleColors.RESET);
         }
@@ -104,16 +99,7 @@ public class BankingApplication {
         if (currentUser != null) {
             System.out.print(ConsoleColors.BOLD + "Enter amount to withdraw: " + ConsoleColors.RESET);
             double withdrawAmount = Double.parseDouble(scanner.nextLine());
-            if (withdrawAmount > 0) {
-                if (currentUser.getBalance() >= withdrawAmount) {
-                    currentUser.withdraw(withdrawAmount);
-                    System.out.println(ConsoleColors.GREEN + "Withdrew: $" + withdrawAmount + ConsoleColors.RESET);
-                } else {
-                    System.out.println(ConsoleColors.RED + "Insufficient funds." + ConsoleColors.RESET);
-                }
-            } else {
-                System.out.println(ConsoleColors.RED + "Invalid withdrawal amount." + ConsoleColors.RESET);
-            }
+            bank.withdraw(currentUser, withdrawAmount);
         } else {
             System.out.println(ConsoleColors.RED + "No user selected." + ConsoleColors.RESET);
         }
@@ -121,7 +107,7 @@ public class BankingApplication {
 
     private static void checkBalance() {
         if (currentUser != null) {
-            System.out.println(ConsoleColors.CYAN + "Current Balance: $" + currentUser.getBalance() + ConsoleColors.RESET);
+            bank.checkBalance(currentUser);
         } else {
             System.out.println(ConsoleColors.RED + "No user selected." + ConsoleColors.RESET);
         }
@@ -129,10 +115,7 @@ public class BankingApplication {
 
     private static void viewTransactionHistory() {
         if (currentUser != null) {
-            System.out.println(ConsoleColors.CYAN + "Transaction History:" + ConsoleColors.RESET);
-            for (String transaction : currentUser.getTransactionHistory()) {
-                System.out.println(transaction);
-            }
+            bank.viewTransactionHistory(currentUser);
         } else {
             System.out.println(ConsoleColors.RED + "No user selected." + ConsoleColors.RESET);
         }

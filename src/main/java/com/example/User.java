@@ -4,39 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private String username;
-    private double balance;
-    private List<String> transactionHistory;
+    private final Username username;
+    private Balance balance;
+    private final List<Transaction> transactionHistory;
 
-    public User(String username) {
+    public User(Username username) {
         this.username = username;
-        this.balance = 0.0;
+        this.balance = new Balance(0);
         this.transactionHistory = new ArrayList<>();
     }
 
-    public String getUsername() {
+    public Username getUsername() {
         return username;
     }
 
-    public double getBalance() {
+    public Balance getBalance() {
         return balance;
     }
 
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-            transactionHistory.add("Deposited: $" + amount);
-        }
+        this.balance.deposit(amount);
+        transactionHistory.add(new Transaction(new Balance(amount), "deposit"));
     }
 
     public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-            transactionHistory.add("Withdrew: $" + amount);
+        if (this.balance.canWithdraw(amount)) {
+            this.balance.withdraw(amount);
+            transactionHistory.add(new Transaction(new Balance(amount), "withdraw"));
+        } else {
+            throw new IllegalArgumentException("Insufficient funds");
         }
     }
 
-    public List<String> getTransactionHistory() {
+    public List<Transaction> getTransactionHistory() {
         return transactionHistory;
     }
 }
